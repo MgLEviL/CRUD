@@ -1,0 +1,64 @@
+{% extends "CORE/main.html" %}
+
+
+{% block content %}
+<!-- Add form -->
+	<div class="container" id="form-add">
+		<div class="row">
+			<h2>Añadir nueva nota</h2>
+			<form id="form" method="POST" action="" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<a href="javascript:addNote()" type="submit" class="save btn btn-default">Guardar</a>
+			</form>
+		</div>
+	</div>
+<!-- List notes -->
+<div class="container col-md-8 col-md-offset-4" id="notes">
+	<h2>Notas</h2>
+		{% for n in notes %}
+			<div class="row" style="padding: 15px 300px 15px 0px;">
+				<p class="content-note" value="{{n.id}}"><strong>ID{{ n.id }}</strong> {{ n.note }}</p>
+				<p>{{n.date}}</p>			
+		
+				<a href="javascript:delNote({{n.id}})" class="btn btn-danger">Eliminar</a>
+				<button id="update_button" value="{{n.id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#UpdateMenu">Actualizar</button>
+			</div>
+		{% endfor %}
+</div>
+
+<!-- Update form modal -->
+<div class="modal fade" id="UpdateMenu" tabindex="-1" role="dialog" aria-labelledby="UpdateMenu" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Actualizar nota</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">	
+			<form id="form_update" method="POST">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input id="id_update" type="hidden" name="id" value="">
+				<a id="save_update" href="" class="btn btn-primary">Guardar</a>
+			</form>
+		</div>
+	  </div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+	<script type="text/javascript" src="/static/js/crud.js"></script>
+<script>
+	$(document).on('click', '#update_button', function(ev) {
+	  	ev.preventDefault();
+	    var id_note = $(this).val();
+
+	    $("#save_update").attr("href", 'javascript:updateNote(' + id_note + ')');
+	    $("#id_update").attr("value", id_note );
+	});
+</script>
+{% endblock extra_js %}
