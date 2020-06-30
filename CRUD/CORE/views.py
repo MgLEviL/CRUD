@@ -31,7 +31,7 @@ def deleteNote(request):
 def updateNote(request):
 
 	if request.is_ajax():
-		import ipdb; ipdb.set_trace()
+		#import ipdb; ipdb.set_trace()
 		note = get_object_or_404(Note, id=request.POST['id'])
 		upt_form = NoteForm(request.POST, instance=note)
 
